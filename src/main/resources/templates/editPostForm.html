@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>과목 수정</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .edit-container {
+            margin-top: 50px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+<div class="container edit-container">
+    <h1 class="display-4">게시글 수정</h1>
+    <form th:action="@{/posts/{postId}/edit(postId=${post.postId})}" th:object="${post}" method="post">
+        <div class="form-group">
+            <label for="title">게시글 제목</label>
+            <input type="text" id="title" name="title" class="form-control" th:value="${post.title}" required>
+        </div>
+        <div class="form-group">
+            <label for="content">내용</label>
+            <input type="text" id="content" name="content" class="form-control" th:value="${post.content}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">수정하기</button>
+        <a class="btn btn-secondary" href="/">취소</a>
+    </form>
+</div>
+
+<!-- 부트스트랩 JS 추가 -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>과목 상세 정보</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .details-container {
+            margin-top: 50px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .details-buttons {
+            margin-top: 20px;
+        }
+        .details-buttons a {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container details-container">
+    <div th:if="${message}" class="alert alert-success" role="alert">
+        <span th:text="${message}">Default message here</span>
+    </div>
+    <h1 class="display-4" th:text="${post.title}">게시판 제목</h1>
+    <p class="lead">내용: <span th:text="${post.content}"></span></p>
+    <div class="details-buttons">
+        <a id="deleteBtn" class="btn btn-danger" href="#">삭제</a>
+        <a id="editBtn" class="btn btn-primary" th:href="@{/posts/{postId}/edit(postId=${post.postId})}">수정</a>
+        <a id="backBtn" class="btn btn-secondary" href="/">돌아가기</a>
+    </div>
+</div>
+
+<!-- 부트스트랩 JS 추가 -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    document.getElementById("deleteBtn").addEventListener("click", function(e) {
+        e.preventDefault();
+        if (confirm('정말로 삭제하시겠습니까?')) {
+            fetch("/posts/" + [[${post.postId}]], {
+                method: "delete"
+            }).then(function(res) {
+                window.location.href = "/";
+            });
+        }
+    });
+</script>
+</body>
+</html>
