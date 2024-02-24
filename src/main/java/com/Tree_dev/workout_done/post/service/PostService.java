@@ -1,79 +1,67 @@
 package com.Tree_dev.workout_done.post.service;
 
+import com.Tree_dev.workout_done.board.entity.Board;
+import com.Tree_dev.workout_done.board.service.BoardService;
 import com.Tree_dev.workout_done.post.entity.Post;
-import com.Tree_dev.workout_done.post.exception.ExceptionCode;
-import com.Tree_dev.workout_done.post.exception.ServiceLogicException;
+import com.Tree_dev.workout_done.common.exception.ExceptionCode;
+import com.Tree_dev.workout_done.common.exception.ServiceLogicException;
 import com.Tree_dev.workout_done.post.repository.PostRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class PostService {
 
-    @Autowired
     private final PostRepository postRepository;
+    private final BoardService boardService;
 
-    public PostService(PostRepository postRepository) {
+    public PostService(PostRepository postRepository, BoardService boardService) {
+        this.boardService = boardService;
         this.postRepository = postRepository;
     }
 
-    @Transactional
-    public Post updatePost(Post post) {
-
-        Post findPost = postRepository.findById(post.getPostId())
-                .orElseThrow(() -> new ServiceLogicException(ExceptionCode.POST_NOT_FOUND));
-
-        Optional.ofNullable(post.getTitle())
-                .ifPresent(title -> findPost.setTitle(title));
-        Optional.ofNullable(post.getContent())
-                .ifPresent(content -> findPost.setContent(content));
-
-        // if (true) {
-        //     throw new RuntimeException("롤백 발생!");
-        // }
-
-        return postRepository.save(findPost);
+    public Page<Post> findPostsByBoardAndKeyword(Board board, String keyword, PageRequest pageRequest) {
+        if (keyword != null && !keyword.isEmpty()) {
+            return postRepository.findAllByBoardAndTitleContaining(board, keyword, pageRequest);
+        } else {
+            return postRepository.findAllByBoardOrderByCreatedAtDesc(board, pageRequest);
+        }
     }
 
-    public List<Post> findPosts() {
-        return postRepository.findAll();
-    }
-
-    public Page<Post> findPosts(Pageable pageable) {
-        return postRepository.findAll(pageable);
-    }
-
-    public Page<Post> findAllPostsOrderedByTitleAsc(Pageable pageable) {
-        return postRepository.findAllByOrderByTitleAsc(pageable);
-    }
-
-    public Page<Post> findAllPostsOrderedByTitleDesc(Pageable pageable) {
-        return postRepository.findAllByOrderByTitleDesc(pageable);
-    }
-    public Post findPost(long postId) {
+    public Post findPost(Long postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> new ServiceLogicException(ExceptionCode.POST_NOT_FOUND));
     }
 
-    public Post createPost(Post post) {
+    public Post createPost(Post post, Long boardId) {
+        Board boardToCreate = boardService.findBoardById(boardId);
+        post.setBoard(boardToCreate);
         Post savedPost = postRepository.save(post);
 
         return savedPost;
     }
 
-    public void deletePost(long postId) {
-        Post post = postRepository.findById(postId).orElseThrow(
-                () -> new ServiceLogicException(ExceptionCode.POST_NOT_FOUND)
-        );
+    public Post updatePost(Post post, Long postId) {
+        post.setId(postId);
+        Post foundPost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new ServiceLogicException(ExceptionCode.POST_NOT_FOUND));
 
-        postRepository.delete(post);
+        Optional.ofNullable(post.getTitle())
+                .ifPresent(title -> foundPost.setTitle(title));
+        Optional.ofNullable(post.getContent())
+                .ifPresent(content -> foundPost.setContent(content));
+
+        return postRepository.save(foundPost);
     }
 
+    public void deletePost(Long id) {
+        Post foundPost = postRepository.findById(id)
+                .orElseThrow(() -> new ServiceLogicException(ExceptionCode.POST_NOT_FOUND));
 
+        postRepository.delete(foundPost);
+    }
 }

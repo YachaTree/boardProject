@@ -1,6 +1,7 @@
 package com.Tree_dev.workout_done.post.entity;
 
-import com.Tree_dev.workout_done.audit.BaseEntity;
+import com.Tree_dev.workout_done.board.entity.Board;
+import com.Tree_dev.workout_done.common.entity.BaseEntity;
 import com.Tree_dev.workout_done.registration.RegistrationPost;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "post")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -17,21 +17,28 @@ import java.util.List;
 public class Post extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long postId;
+    private Long id;
 
-    @Column(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "board_id", nullable = false)
+    private Board board;
+
+    @Column(nullable = false, length = 30)
     private String title;
 
-    @Column(nullable = true)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-
-    @OneToMany(mappedBy = "post")
-    private List<RegistrationPost> registrationPosts = new ArrayList<>();
-
-
-    public Post(String title, String content) {
+    public Post(Board board, String title, String content) {
+        this.board = board;
         this.title = title;
         this.content = content;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+        if (!this.board.getPosts().contains(this)) {
+            this.board.getPosts().add(this);
+        }
     }
 }

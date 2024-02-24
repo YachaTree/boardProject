@@ -1,6 +1,6 @@
 package com.Tree_dev.workout_done.user.entity;
 
-import com.Tree_dev.workout_done.audit.BaseEntity;
+import com.Tree_dev.workout_done.common.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package com.Tree_dev.workout_done.post.controller;
+package com.Tree_dev.workout_done.common.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
     @GetMapping("/")
     public String home() {
-        return "redirect:/posts";
+        return "redirect:/boards";
     }
 }
