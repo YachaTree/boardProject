@@ -1,13 +1,16 @@
 package com.Tree_dev.workout_done.post.entity;
 
 import com.Tree_dev.workout_done.board.entity.Board;
+import com.Tree_dev.workout_done.comment.entity.Comment;
 import com.Tree_dev.workout_done.common.entity.BaseEntity;
 import com.Tree_dev.workout_done.registration.RegistrationPost;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -28,6 +31,9 @@ public class Post extends BaseEntity {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true) // 게시글 삭제시 연결된 자식 엔티티인 댓글 함께 삭제하기 위한 셋팅 설정
+    private List<Comment> comments;
 
     public Post(Board board, String title, String content) {
         this.board = board;

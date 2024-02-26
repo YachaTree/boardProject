@@ -55,9 +55,9 @@ public class CommentService {
     }
 
     public void deleteComment(Long commentId) {
-        Comment foundcomment = commentRepository.findById(commentId)
+        Comment foundComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new ServiceLogicException(ExceptionCode.COMMENT_NOT_FOUND));
 
-        commentRepository.delete(foundcomment);
+        commentRepository.delete(foundComment);
     }
 }

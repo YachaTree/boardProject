@@ -2,6 +2,8 @@ package com.Tree_dev.workout_done.post.service;
 
 import com.Tree_dev.workout_done.board.entity.Board;
 import com.Tree_dev.workout_done.board.service.BoardService;
+import com.Tree_dev.workout_done.comment.entity.Comment;
+import com.Tree_dev.workout_done.comment.repository.CommentRepository;
 import com.Tree_dev.workout_done.post.entity.Post;
 import com.Tree_dev.workout_done.common.exception.ExceptionCode;
 import com.Tree_dev.workout_done.common.exception.ServiceLogicException;
@@ -19,9 +21,12 @@ public class PostService {
     private final PostRepository postRepository;
     private final BoardService boardService;
 
-    public PostService(PostRepository postRepository, BoardService boardService) {
+    private final CommentRepository commentRepository;
+
+    public PostService(PostRepository postRepository, BoardService boardService, CommentRepository commentRepository) {
         this.boardService = boardService;
         this.postRepository = postRepository;
+        this. commentRepository = commentRepository;
     }
 
     public Page<Post> findPostsByBoardAndKeyword(Board board, String keyword, PageRequest pageRequest) {
