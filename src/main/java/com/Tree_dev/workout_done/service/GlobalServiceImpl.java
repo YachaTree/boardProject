@@ -60,7 +60,7 @@ public class GlobalServiceImpl implements GlobalService {
                 .build();
 
         Image image = Image.builder()
-                .url("/profileImages/anonymous.png")
+                .url("/anonymous.png")
                 .member(member)
                 .build();
 

@@ -46,12 +46,12 @@ public class ImageServiceImpl implements ImageService{
             Image image = imageRepository.findByMember(member);
             if (image != null) {
                 // 이미지가 이미 존재하면 url 업데이트
-                image.updateUrl("/anonymous.png" + imageFileName);
+                image.updateUrl("/profileImages/" + imageFileName);
             } else {
                 // 이미지가 없으면 객체 생성 후 저장
                 image = Image.builder()
                         .member(member)
-                        .url("/anonymous.png" + imageFileName)
+                        .url("/profileImages/" + imageFileName)
                         .build();
             }
             imageRepository.save(image);
