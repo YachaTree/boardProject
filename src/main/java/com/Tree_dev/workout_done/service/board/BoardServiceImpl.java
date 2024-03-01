@@ -65,7 +65,7 @@ public class BoardServiceImpl implements BoardService{
                 }
 
                 BoardImage image = BoardImage.builder()
-                        .url("/boardImages/" + imageFileName)
+                        .url("/" + imageFileName)
                         .board(result)
                         .build();
 

@@ -46,12 +46,12 @@ public class ImageServiceImpl implements ImageService{
             Image image = imageRepository.findByMember(member);
             if (image != null) {
                 // 이미지가 이미 존재하면 url 업데이트
-                image.updateUrl("/profileImages/" + imageFileName);
+                image.updateUrl("/anonymous.png" + imageFileName);
             } else {
                 // 이미지가 없으면 객체 생성 후 저장
                 image = Image.builder()
                         .member(member)
-                        .url("/profileImages/" + imageFileName)
+                        .url("/anonymous.png" + imageFileName)
                         .build();
             }
             imageRepository.save(image);
@@ -65,7 +65,7 @@ public class ImageServiceImpl implements ImageService{
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("이메일이 존재하지 않습니다."));
         Image image = imageRepository.findByMember(member);
 
-        String defaultImageUrl = "/profileImages/anonymous.png";
+        String defaultImageUrl = "/anonymous.png";
 
         if (image == null) {
             return ImageResponseDTO.builder()
